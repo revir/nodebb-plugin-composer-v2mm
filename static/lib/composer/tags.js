@@ -46,7 +46,7 @@ define('composer/tags', function() {
 				delay: 100,
 				position: { my: "left bottom", at: "left top", collision: "flip" },
 				open: function() {
-					$(this).autocomplete('widget').css('z-index', 20000);
+					$(this).autocomplete('widget').css('z-index', 200001);
 				},
 				source: function(request, response) {
 					socket.emit('topics.autocompleteTags', {query: request.term, cid: postData.cid}, function(err, tags) {
