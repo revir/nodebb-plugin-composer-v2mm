@@ -19,14 +19,6 @@ define('composer/categoryList', function() {
 
 			// Remove categories that are just external links
 			categories = categories.filter(function(category) {
-				if (ajaxify && ajaxify.data.isCustom) {
-
-				} else {
-					if (category.isCustom) {
-						return false;
-					}
-				}
-
 				return !category.link;
 			});
 
@@ -74,10 +66,6 @@ define('composer/categoryList', function() {
 
 			$('.category-name').translateText(listEl.find('option[value="' + postData.cid + '"]').text() || '[[modules:composer.select_category]]');
 			$('.category-selector').find('li[data-cid="' + postData.cid + '"]').addClass('active');
-
-			if (ajaxify && ajaxify.data.isCustom) {
-				$('select.category-list').attr('disabled', true);
-			}
 		});
 
 		listEl.on('change', function() {
