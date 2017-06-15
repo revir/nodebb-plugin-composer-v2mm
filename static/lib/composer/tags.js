@@ -67,7 +67,9 @@ define('composer/tags', function() {
 		});
 
 		input.attr('tabIndex', tagEl.attr('tabIndex'));
-		input.attr('size', tagEl.attr('placeholder').length);
+
+		// Chinese charactor is a little bit longer.
+		input.attr('size', tagEl.attr('placeholder').length * 2);
 		input.on('blur', function() {
 			triggerEnter(input);
 		});

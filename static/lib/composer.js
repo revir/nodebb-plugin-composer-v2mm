@@ -239,6 +239,7 @@ define('composer', [
 				uid: threadData.uid,
 				handle: threadData.handle,
 				title: threadData.title,
+				externalLink: threadData.externalLink,
 				body: threadData.body,
 				modified: false,
 				isMain: threadData.isMain,
@@ -378,6 +379,7 @@ define('composer', [
 
 		var data = {
 			title: title,
+			externalLink: postData ? postData.externalLink : undefined,
 			mobile: composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm',
 			resizable: true,
 			allowTopicsThumbnail: allowTopicsThumbnail,
@@ -514,12 +516,14 @@ define('composer', [
 		var postContainer = $('#cmp-uuid-' + post_uuid);
 		var handleEl = postContainer.find('.handle');
 		var titleEl = postContainer.find('.title');
+		var externalLinkEl = postContainer.find('.external-link');
 		var bodyEl = postContainer.find('textarea');
 		var categoryEl = postContainer.find('.category-list');
 		var thumbEl = postContainer.find('input#topic-thumb-url');
 		var onComposeRoute = postData.hasOwnProperty('template') && postData.template.compose === true;
 
 		titleEl.val(titleEl.val().trim());
+		externalLinkEl.val(externalLinkEl.val().trim());
 		bodyEl.val(bodyEl.val().rtrim());
 		if (thumbEl.length) {
 			thumbEl.val(thumbEl.val().trim());
@@ -552,6 +556,7 @@ define('composer', [
 			composerData = {
 				handle: handleEl ? handleEl.val() : undefined,
 				title: titleEl.val(),
+				externalLink: externalLinkEl.val(),
 				content: bodyEl.val(),
 				thumb: thumbEl.val() || '',
 				cid: categoryEl.get(0).value,
@@ -570,6 +575,7 @@ define('composer', [
 				handle: handleEl ? handleEl.val() : undefined,
 				content: bodyEl.val(),
 				title: titleEl.val(),
+				externalLink: externalLinkEl.val(),
 				thumb: thumbEl.val() || '',
 				tags: tags.getTags(post_uuid)
 			};
