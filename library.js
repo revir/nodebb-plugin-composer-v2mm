@@ -66,7 +66,7 @@ plugin.addPrefetchTags = function(hookData, callback) {
 		return path;
 	}));
 
-	callback(null, tags);
+	callback(null, hookData);
 };
 
 plugin.getFormattingOptions = function(callback) {
