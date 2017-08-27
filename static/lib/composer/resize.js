@@ -144,7 +144,6 @@ define('composer/resize', [], function() {
 			var position = resizeEnd - resizeOffset;
 			var bounds = getBounds();
 			var ratio = (bounds.height - position) / (bounds.boundedHeight);
-
 			if (resizeEnd - resizeBegin === 0 && postContainer.hasClass('maximized')) {
 				postContainer.removeClass('maximized');
 				ratio = (!oldRatio || oldRatio >= 1 - snapMargin) ? 0.5 : oldRatio;
@@ -156,7 +155,6 @@ define('composer/resize', [], function() {
 			} else {
 				postContainer.removeClass('maximized');
 			}
-
 			saveRatio(ratio);
 		}
 

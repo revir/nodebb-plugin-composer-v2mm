@@ -1,25 +1,26 @@
 {
-  "name": "nodebb-plugin-composer-default",
-  "version": "5.0.7",
+  "name": "nodebb-plugin-composer-v2mm",
+  "version": "5.0.8",
   "description": "Default composer for NodeBB",
   "main": "library.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NodeBB/nodebb-plugin-composer-default"
+    "url": "https://github.com/revir/nodebb-plugin-composer-v2mm"
   },
   "keywords": [
+    "v2mm",
     "nodebb",
     "plugin",
     "composer",
     "markdown"
   ],
   "author": {
-    "name": "NodeBB Team",
-    "email": "sales@nodebb.org"
+    "name": "River",
+    "email": "river.qing@gmail.com"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/NodeBB/nodebb-plugin-composer-default/issues"
+    "url": "https://github.com/revir/nodebb-plugin-composer-v2mm/issues"
   },
   "readmeFilename": "README.md",
   "nbbpm": {

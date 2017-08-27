@@ -241,6 +241,7 @@ define('composer', [
 				uid: threadData.uid,
 				handle: threadData.handle,
 				title: threadData.title,
+				externalLink: threadData.externalLink,
 				body: threadData.body,
 				modified: false,
 				isMain: threadData.isMain,
@@ -381,6 +382,7 @@ define('composer', [
 
 		var data = {
 			title: title,
+			externalLink: postData ? postData.externalLink : undefined,
 			mobile: composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm',
 			resizable: true,
 			allowTopicsThumbnail: allowTopicsThumbnail,
@@ -524,11 +526,13 @@ define('composer', [
 		var handleEl = postContainer.find('.handle');
 		var titleEl = postContainer.find('.title');
 		var bodyEl = postContainer.find('textarea');
+		var externalLinkEl = postContainer.find('.external-link');
 		var thumbEl = postContainer.find('input#topic-thumb-url');
 		var onComposeRoute = postData.hasOwnProperty('template') && postData.template.compose === true;
 
 		titleEl.val(titleEl.val().trim());
 		bodyEl.val(utils.rtrim(bodyEl.val()));
+		externalLinkEl.val(externalLinkEl.val().trim());
 		if (thumbEl.length) {
 			thumbEl.val(thumbEl.val().trim());
 		}
@@ -563,6 +567,7 @@ define('composer', [
 				content: bodyEl.val(),
 				thumb: thumbEl.val() || '',
 				cid: categoryList.getSelectedCid(),
+				externalLink: externalLinkEl.val(),
 				tags: tags.getTags(post_uuid)
 			};
 		} else if (action === 'posts.reply') {
@@ -578,6 +583,7 @@ define('composer', [
 				handle: handleEl ? handleEl.val() : undefined,
 				content: bodyEl.val(),
 				title: titleEl.val(),
+				externalLink: externalLinkEl.val(),
 				thumb: thumbEl.val() || '',
 				tags: tags.getTags(post_uuid)
 			};
@@ -626,7 +632,6 @@ define('composer', [
 	function onShow() {
 		$('html').addClass('composing');
 	}
-
 	function onHide() {
 		$('body').css({ paddingBottom: 0 });
 		$('html').removeClass('composing');

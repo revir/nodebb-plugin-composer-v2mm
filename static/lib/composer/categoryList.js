@@ -38,6 +38,7 @@ define('composer/categoryList', ['categorySelector'], function(categorySelector)
 					if (!categoryMap[cid]) {
 						categoryMap[cid] = category.parent;
 						categoryMap[cid].disabledClass = true;
+
 					}
 					categoryMap[cid].children = categoryMap[cid].children || [];
 					categoryMap[cid].children.push(category);
@@ -83,7 +84,6 @@ define('composer/categoryList', ['categorySelector'], function(categorySelector)
 				toggleDropDirection(postContainer);
 			});
 		});
-
 
 		$('.category-selector').on('click', 'li', function() {
 			$('.category-name').text($(this).text());

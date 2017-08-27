@@ -11,7 +11,7 @@
 			</div>
 			<!-- ENDIF isTopic -->
 			<div class="pull-right">
-				<button class="btn btn-sm btn-primary composer-submit" data-action="post" tabindex="-1"><i class="fa fa-chevron-right"></i></button>
+				<button class="btn btn-sm btn-primary composer-submit" data-action="post" tabindex="-1"><i class="fa fa-check"></i></button>
 			</div>
 			<!-- IF !isTopicOrMain -->
 			<h4 class="title">[[topic:composer.replying_to, "{title}"]]</h4>
@@ -22,25 +22,39 @@
 			<div class="col-sm-3 col-md-12">
 				<input class="handle form-control" type="text" tabindex="1" placeholder="[[topic:composer.handle_placeholder]]" value="{handle}" />
 			</div>
-			<div class="<!-- IF isTopic -->col-lg-9<!-- ELSE -->col-lg-12<!-- ENDIF isTopic --> col-md-12">
+			<div class="<!-- IF isTopic -->col-lg-5<!-- ELSE -->col-lg-12<!-- ENDIF isTopic --> col-md-6 col-sm-12">
 				<!-- IF isTopicOrMain -->
 				<input class="title form-control" type="text" tabindex="1" placeholder="[[topic:composer.title_placeholder]]" value="{title}"/>
 				<!-- ELSE -->
 				<span class="title form-control">[[topic:composer.replying_to, "{title}"]]</span>
 				<!-- ENDIF isTopicOrMain -->
 			</div>
+
+			<div class="<!-- IF isTopic -->col-lg-4<!-- ELSE -->hide<!-- ENDIF isTopic --> col-md-6 col-sm-12">
+				<input class="external-link form-control" type="text" tabindex="2" placeholder="[[v2mm:external_url_placeholder]]" value="{externalLink}"/>
+			</div>
+
 			<!-- ELSE -->
-			<div class="<!-- IF isTopic -->col-lg-9<!-- ELSE -->col-lg-12<!-- ENDIF isTopic --> col-md-12">
+			<div class="<!-- IF isTopic -->col-lg-5<!-- ELSE -->
+				<!-- IF isTopicOrMain -->col-lg-6<!-- ELSE -->col-lg-12
+				<!-- ENDIF isTopicOrMain --><!-- ENDIF isTopic --> col-md-6">
 				<!-- IF isTopicOrMain -->
 				<input class="title form-control" type="text" tabindex="1" placeholder="[[topic:composer.title_placeholder]]" value="{title}"/>
 				<!-- ELSE -->
 				<span class="title form-control">[[topic:composer.replying_to, "{title}"]]</span>
 				<!-- ENDIF isTopicOrMain -->
 			</div>
+
+			<div class="<!-- IF isTopic -->col-lg-4<!-- ELSE -->
+				<!-- IF isTopicOrMain -->col-lg-6<!-- ELSE -->hide
+				<!-- ENDIF isTopicOrMain --><!-- ENDIF isTopic --> col-md-6 col-sm-12">
+				<input class="external-link form-control" type="text" tabindex="2" placeholder="[[v2mm:external_url_placeholder]]" value="{externalLink}"/>
+			</div>
+
 			<!-- ENDIF showHandleInput -->
 			<!-- IF isTopic -->
 			<div class="category-list-container col-lg-3 col-md-12 hidden-sm hidden-xs">
-
+				<!-- <select tabindex="3" class="form-control category-list"></select> -->
 			</div>
 			<!-- ENDIF isTopic -->
 		</div>

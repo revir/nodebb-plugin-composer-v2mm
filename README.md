@@ -1,6 +1,6 @@
-# Default Composer for NodeBB
+# Default Composer for V2MM
 
-This plugin activates the default composer for NodeBB. It is activated by default, but can be swapped out as necessary.
+This plugin activates the composer for V2MM, modified from the default composer of NodeBB.
 
 ## Screenshots
 

@@ -53,7 +53,7 @@ define('composer/tags', function() {
 				delay: 100,
 				position: { my: "left bottom", at: "left top", collision: "flip" },
 				open: function() {
-					$(this).autocomplete('widget').css('z-index', 20000);
+					$(this).autocomplete('widget').css('z-index', 200001);
 				},
 				source: function(request, response) {
 					socket.emit('topics.autocompleteTags', {query: request.term, cid: postData.cid}, function(err, tags) {
@@ -74,7 +74,9 @@ define('composer/tags', function() {
 		});
 
 		input.attr('tabIndex', tagEl.attr('tabIndex'));
-		input.attr('size', tagEl.attr('placeholder').length);
+
+		// 2 times resolve length problem in Chinese
+		input.attr('size', tagEl.attr('placeholder').length*2);
 		input.on('blur', function() {
 			triggerEnter(input);
 		});

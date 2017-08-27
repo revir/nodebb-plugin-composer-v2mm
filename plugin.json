@@ -1,6 +1,6 @@
 {
-	"id": "nodebb-plugin-composer-default",
-	"url": "https://github.com/NodeBB/nodebb-plugin-composer-default",
+	"id": "nodebb-plugin-composer-v2mm",
+	"url": "https://github.com/revir/nodebb-plugin-composer-v2mm",
 	"library": "library.js",
 	"hooks": [
 		{ "hook": "static:app.load", "method": "init" },
@@ -33,3 +33,4 @@
 	],
 	"templates": "static/templates"
 }
+

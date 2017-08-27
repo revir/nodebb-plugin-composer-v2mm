@@ -121,6 +121,7 @@ $(document).ready(function() {
 			require(['composer'], function(composer) {
 				var topicUUID = composer.findByTid(data.tid);
 				composer.addQuote(data.tid, data.pid, data.selectedPid, data.topicName, data.username, data.text, topicUUID);
+
 			});
 		} else {
 			ajaxify.go('compose?tid=' + data.tid + '&toPid=' + data.pid + '&quoted=1&username=' + data.username);
