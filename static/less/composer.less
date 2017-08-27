@@ -60,6 +60,15 @@
 			overflow: hidden;
 			white-space: nowrap;
 		}
+		.external-link {
+		    margin: 0;
+		    padding: 8px;
+		    /* font-size: 18px; */
+		    border: 0;
+		    -webkit-box-shadow: none;
+		    box-shadow: none;
+		    overflow: hidden;
+		}
 	}
 
 	.title-container {
@@ -79,11 +88,20 @@
 
 			[component="category-selector"] {
 				float: right !important;
+				width: 100%;
 
 				.category-dropdown-menu {
 					max-height: 300px;
 					right: 0;
 					left: auto;
+				}
+
+				.fa-stack {
+					font-size: 85%;
+				}
+				.dropdown-toggle {
+					width: 100%;
+					text-align: center;
 				}
 			}
 		}
