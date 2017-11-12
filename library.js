@@ -48,25 +48,24 @@ plugin.addAdminNavigation = function(header, callback) {
 	callback(null, header);
 };
 
-plugin.addPrefetchTags = function(data, callback) {
+plugin.addPrefetchTags = function(hookData, callback) {
 	var prefetch = [
-			'/assets/src/modules/composer.js', '/assets/src/modules/composer/uploads.js', '/assets/src/modules/composer/drafts.js',
-			'/assets/src/modules/composer/tags.js', '/assets/src/modules/composer/categoryList.js', '/assets/src/modules/composer/resize.js',
-			'/assets/src/modules/composer/autocomplete.js', '/assets/templates/composer.tpl',
-			'/assets/language/' + (meta.config.defaultLang || 'en-GB') + '/topic.json',
-			'/assets/language/' + (meta.config.defaultLang || 'en-GB') + '/modules.json',
-			'/assets/language/' + (meta.config.defaultLang || 'en-GB') + '/tags.json'
-		];
+		'/assets/src/modules/composer.js', '/assets/src/modules/composer/uploads.js', '/assets/src/modules/composer/drafts.js',
+		'/assets/src/modules/composer/tags.js', '/assets/src/modules/composer/categoryList.js', '/assets/src/modules/composer/resize.js',
+		'/assets/src/modules/composer/autocomplete.js', '/assets/templates/composer.tpl',
+		'/assets/language/' + (meta.config.defaultLang || 'en-GB') + '/topic.json',
+		'/assets/language/' + (meta.config.defaultLang || 'en-GB') + '/modules.json',
+		'/assets/language/' + (meta.config.defaultLang || 'en-GB') + '/tags.json'
+	];
 
-	data.links = data.links.concat(prefetch.map(function(path) {
-		path = {
+	hookData.links = hookData.links.concat(prefetch.map(function(path) {
+		return {
 			rel: 'prefetch',
 			href: nconf.get('relative_path') + path + '?' + meta.config['cache-buster']
-		}
-		return path;
+		};
 	}));
 
-	callback(null, data);
+	callback(null, hookData);
 };
 
 plugin.getFormattingOptions = function(callback) {
@@ -205,6 +204,7 @@ plugin.build = function(data, callback) {
 					allowTopicsThumbnail: meta.config.allowTopicsThumbnail && data.isMain,
 
 					topicTitle: data.topicData ? data.topicData.title.replace(/%/g, '&#37;').replace(/,/g, '&#44;') : '',
+					thumb: data.topicData ? data.topicData.thumb : '',
 					body: body,
 
 					isMain: data.isMain,

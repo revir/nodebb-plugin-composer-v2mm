@@ -1,6 +1,6 @@
 'use strict';
 
-/* globals define, socket, app, config, ajaxify, utils, templates, bootbox, screenfull */
+/* globals define, socket, app, config, ajaxify, utils, bootbox, screenfull */
 
 define('composer', [
 	'taskbar',
@@ -166,7 +166,7 @@ define('composer', [
 	};
 
 	composer.newTopic = function(data) {
-		push({
+		var pushData = {
 			action: 'topics.post',
 			cid: data.cid,
 			title: data.title || '',
@@ -174,7 +174,14 @@ define('composer', [
 			tags: data.tags || [],
 			modified: false,
 			isMain: true
+		};
+
+		$(window).trigger('filter:composer.topic.push', {
+			data: data,
+			pushData: pushData
 		});
+
+		push(pushData);
 	};
 
 	composer.addQuote = function(tid, toPid, selectedPid, title, username, text, uuid) {
@@ -312,9 +319,22 @@ define('composer', [
 			composer.posts[post_uuid].modified = true;
 		});
 
-		submitBtn.on('click', function() {
+		submitBtn.on('click', function(e) {
+			e.preventDefault();
+			e.stopPropagation();	// Other click events bring composer back to active state which is undesired on submit
+
 			$(this).attr('disabled', true);
 			post(post_uuid);
+		});
+
+		postContainer.keypress(function (event) {
+			var keyCode = (event.which ? event.which : event.keyCode);
+			if ((keyCode === 10 || keyCode == 13) && event.ctrlKey) {
+				submitBtn.attr('disabled', true);
+				post(post_uuid);
+				return false;
+			}
+			return true;
 		});
 
 		postContainer.find('.composer-discard').on('click', function(e) {
@@ -401,7 +421,12 @@ define('composer', [
 			mobileHistoryAppend();
 		}
 
-		parseAndTranslate('composer', data, function(composerTemplate) {
+		$(window).trigger('filter:composer.create', {
+			postData: postData,
+			createData: data
+		});
+
+		app.parseAndTranslate('composer', data, function(composerTemplate) {
 			if ($('#cmp-uuid-' + post_uuid).length) {
 				return;
 			}
@@ -480,12 +505,6 @@ define('composer', [
 		window.history.pushState({
 			url: path
 		}, path, config.relative_path + '/' + path);
-	}
-
-	function parseAndTranslate(template, data, callback) {
-		templates.parse(template, data, function(composerTemplate) {
-			translator.translate(composerTemplate, callback);
-		});
 	}
 
 	function handleHelp(postContainer) {
@@ -589,7 +608,14 @@ define('composer', [
 			};
 		}
 
-		$(window).trigger('action:composer.submit', {composerEl: postContainer, action: action, composerData: composerData});
+		$(window).trigger('action:composer.submit', {composerEl: postContainer, action: action, composerData: composerData, postData: postData});
+
+		// Minimize composer (and set textarea as readonly) while submitting
+		var taskbarIconEl = $('#taskbar [data-uuid="' + post_uuid + '"] i');
+		var textareaEl = postContainer.find('.write');
+		taskbarIconEl.removeClass('fa-plus').addClass('fa-circle-o-notch fa-spin');
+		composer.minimize(post_uuid);
+		textareaEl.prop('readonly', true);
 
 		socket.emit(action, composerData, function (err, data) {
 			postContainer.find('.composer-submit').removeAttr('disabled');
@@ -605,7 +631,7 @@ define('composer', [
 			drafts.removeDraft(postData.save_id);
 
 			if (data.queued) {
-				app.alertSuccess(data.message);
+				bootbox.alert(data.message);
 			} else {
 				if (action === 'topics.post') {
 					ajaxify.go('topic/' + data.slug, undefined, (onComposeRoute || composer.bsEnvironment === 'xs' || composer.bsEnvironment === 'sm') ? true : false);
