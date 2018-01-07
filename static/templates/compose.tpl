@@ -57,9 +57,11 @@
 					<!-- END formatting -->
 
 					<!--[if gte IE 9]><!-->
+						<!-- IF privileges.upload:post:image -->
 						<li class="img-upload-btn hide" data-format="picture" tabindex="-1">
 							<i class="fa fa-cloud-upload"></i>
 						</li>
+						<!-- ENDIF privileges.upload:post:image -->
 						<li class="file-upload-btn hide" data-format="upload" tabindex="-1">
 							<i class="fa fa-upload"></i>
 						</li>

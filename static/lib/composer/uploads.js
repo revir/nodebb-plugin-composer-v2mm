@@ -11,16 +11,9 @@ define('composer/uploads', [
 		inProgress: {}
 	};
 
-	var cid;
+	var uploadingText = '';
 
-	var uploadingText = 'uploading 0%';
-
-	uploads.getCid = function() {
-		return cid;
-	};
-
-	uploads.initialize = function(post_uuid, _cid) {
-		cid = _cid;
+	uploads.initialize = function(post_uuid) {
 		initializeDragAndDrop(post_uuid);
 		initializePaste(post_uuid);
 
@@ -216,11 +209,19 @@ define('composer/uploads', [
 		var textarea = postContainer.find('textarea');
 		var text = textarea.val();
 		var uploadForm = postContainer.find('#fileForm');
+		var doneUploading = false;
 		uploadForm.attr('action', config.relative_path + params.route);
 
-		cid = categoryList.getSelectedCid();
+		var cid = categoryList.getSelectedCid();
 		if (!cid && ajaxify.data.cid) {
 			cid = ajaxify.data.cid;
+		}
+
+		for (var i = 0; i < files.length; ++i) {
+			var isImage = files[i].type.match(/image./);
+			// if ((isImage && !app.user.privileges['upload:post:image']) || (!isImage && !app.user.privileges['upload:post:file'])) {
+			// 	return app.alertError('[[error:no-privileges]]');
+			// }
 		}
 
 		var filenameMapping = [];
@@ -260,12 +261,15 @@ define('composer/uploads', [
 				resetForm: true,
 				clearForm: true,
 				formData: params.formData,
-				data: {cid: cid},
+				data: { cid: cid },
 
 				error: onUploadError,
 
 				uploadProgress: function(event, position, total, percent) {
 					translator.translate('[[modules:composer.uploading, ' + percent + '%]]', function(translated) {
+						if (doneUploading) {
+							return;
+						}
 						for (var i=0; i < files.length; ++i) {
 							updateTextArea(filenameMapping[i], translated);
 						}
@@ -273,8 +277,9 @@ define('composer/uploads', [
 				},
 
 				success: function(uploads) {
+					doneUploading = true;
 					if (uploads && uploads.length) {
-						for(var i=0; i<uploads.length; ++i) {
+						for (var i=0; i<uploads.length; ++i) {
 							updateTextArea(filenameMapping[i], uploads[i].url);
 						}
 					}
@@ -337,4 +342,3 @@ define('composer/uploads', [
 
 	return uploads;
 });
-
