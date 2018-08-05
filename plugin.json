@@ -31,6 +31,6 @@
 	"acpScripts": [
 		"./static/lib/admin.js"
 	],
+	"languages": "languages",
 	"templates": "static/templates"
 }
-

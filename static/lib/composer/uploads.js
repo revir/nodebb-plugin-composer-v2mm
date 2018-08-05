@@ -239,7 +239,7 @@ define('composer/uploads', [
 				return app.alertError('[[error:file-too-big, ' + config.maximumFileSize + ']]');
 			}
 
-			text = insertText(text, textarea.getCursorPosition(), (isImage ? '!' : '') + '[' + filenameMapping[i] + '](' + uploadingText + ') ');
+				text = insertText(text, textarea.getCursorPosition(), (isImage ? '!' : '') + '[' + filenameMapping[i] + '](' + uploadingText + ') ');
 		}
 
 		textarea.val(text);
@@ -267,10 +267,23 @@ define('composer/uploads', [
 				formData: params.formData,
 				data: { cid: cid },
 
-				error: onUploadError,
+				error: function (xhr) {
+					var msg = (xhr.responseJSON && xhr.responseJSON.error) || '[[error:parse-error]]';
+					if (xhr && xhr.status === 413) {
+						msg = xhr.statusText || 'Request Entity Too Large';
+					}
+					app.alertError(msg);
+					for (var i=0; i < filenameMapping.length; ++i) {
+						updateTextArea(filenameMapping[i], msg);
+					}
+				},
 
 				uploadProgress: function(event, position, total, percent) {
-					translator.translate('[[modules:composer.uploading, ' + percent + '%]]', function(translated) {
+					var text = '[[modules:composer.uploading, ' + percent + '%]]';
+					if (percent == 100) {
+						text = '[[vcomposer:uploading]]'
+					}
+					translator.translate(text, function(translated) {
 						if (doneUploading) {
 							return;
 						}
@@ -322,7 +335,13 @@ define('composer/uploads', [
 					'x-csrf-token': config.csrf_token
 				},
 				formData: params.formData,
-				error: onUploadError,
+				error: function (xhr) {
+					var msg = (xhr.responseJSON && xhr.responseJSON.error) || '[[error:parse-error]]';
+					if (xhr && xhr.status === 413) {
+						msg = xhr.statusText || 'Request Entity Too Large';
+					}
+					app.alertError(msg);
+				},
 				success: function(uploads) {
 					postContainer.find('#topic-thumb-url').val((uploads[0] || {}).url || '').trigger('change');
 				},
@@ -335,14 +354,5 @@ define('composer/uploads', [
 		});
 		thumbForm.submit();
 	}
-
-	function onUploadError(xhr) {
-		var msg = (xhr.responseJSON && xhr.responseJSON.error) || '[[error:parse-error]]';
-		if (xhr && xhr.status === 413) {
-			msg = xhr.statusText || 'Request Entity Too Large';
-		}
-		app.alertError(msg);
-	}
-
 	return uploads;
 });
