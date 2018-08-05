@@ -239,7 +239,15 @@ define('composer/uploads', [
 				return app.alertError('[[error:file-too-big, ' + config.maximumFileSize + ']]');
 			}
 
-				text = insertText(text, textarea.getCursorPosition(), (isImage ? '!' : '') + '[' + filenameMapping[i] + '](' + uploadingText + ') ');
+			var pos = textarea.getCursorPosition();
+
+			// insert a newline.
+			if (i === 0 && text[pos-1] && text[pos-1] !== '\n') {
+				text = insertText(text, pos, '\n');
+				pos += 1;
+			}
+
+			text = insertText(text, pos, (isImage ? '!' : '') + '[' + filenameMapping[i] + '](' + uploadingText + ') ' + '\n');
 		}
 
 		textarea.val(text);
