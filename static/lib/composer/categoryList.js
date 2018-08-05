@@ -64,6 +64,7 @@ define('composer/categoryList', ['categorySelector'], function(categorySelector)
 				pullRight: true
 			}, function (html) {
 				listContainer.append(html);
+
 				categorySelector.init(listContainer.find('[component="category-selector"]'), function (selectedCategory) {
 					if (postData.hasOwnProperty('cid')) {
 						changeCategory(postContainer, postData, selectedCategory.cid);
@@ -71,6 +72,17 @@ define('composer/categoryList', ['categorySelector'], function(categorySelector)
 
 					$('[tabindex=' + (parseInt($(this).attr('tabindex'), 10) + 1) + ']').trigger('focus');
 				});
+
+				// if the category is disabled or without permission
+				// remove the data-cid attr to prevent user from selecting it;
+				listContainer
+					.find('[component="category-selector"]')
+					.find('[data-cid]').each(function() {
+						if ($(this).hasClass('disabled')) {
+							// remove data-cid, then the click listener can't be triggered.
+							$(this).removeAttr('data-cid');
+						}
+					});
 
 				if (postData.cid) {
 					categorySelector.selectCategory(postData.cid);
@@ -86,11 +98,13 @@ define('composer/categoryList', ['categorySelector'], function(categorySelector)
 		});
 
 		$('.category-selector').on('click', 'li', function() {
+			if ($(this).hasClass('disabled')) return;
 			$('.category-name').text($(this).text());
 			$('.category-selector').removeClass('open');
 			$('.category-selector li').removeClass('active');
 			$(this).addClass('active');
 			var selectedCid = $(this).attr('data-cid');
+
 			categorySelector.selectCategory(selectedCid);
 			if (postData.hasOwnProperty('cid')) {
 				changeCategory(postContainer, postData, selectedCid);
@@ -120,11 +134,12 @@ define('composer/categoryList', ['categorySelector'], function(categorySelector)
 		}
 
 		var bullet = level ? '&bull; ' : '';
+		var cls = category.disabledClass ? 'disabled' : '';
 		category.value = category.cid;
 		category.level = level;
 		category.text = level + bullet + category.name;
 		categoriesData.push(category);
-		$('<li data-cid="' + category.cid + '">' + category.name + '</li>').appendTo($('.category-selector'));
+		$('<li data-cid="' + category.cid + '" class="' + cls + '">' + category.text + '</li>').appendTo($('.category-selector'));
 		category.children.forEach(function (child) {
 			recursive(child, categoriesData, '&nbsp;&nbsp;&nbsp;&nbsp;' + level);
 		});
