@@ -210,12 +210,16 @@ define('composer/uploads', [
 		var text = textarea.val();
 		var uploadForm = postContainer.find('#fileForm');
 		var doneUploading = false;
-		uploadForm.attr('action', config.relative_path + params.route);
 
 		var cid = categoryList.getSelectedCid();
 		if (!cid && ajaxify.data.cid) {
 			cid = ajaxify.data.cid;
 		}
+		if (!cid) {
+			return app.alertError('[[error:category-not-selected]]');
+		}
+
+		uploadForm.attr('action', config.relative_path + params.route);
 
 		for (var i = 0; i < files.length; ++i) {
 			var isImage = files[i].type.match(/image./);
